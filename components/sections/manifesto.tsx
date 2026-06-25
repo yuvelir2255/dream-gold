@@ -1,13 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { useReveal } from "@/lib/use-reveal";
 
 /**
  * Маніфест — editorial-пауза після hero на тлі тёплого графіту.
@@ -15,43 +8,21 @@ if (typeof window !== "undefined") {
  * коли користувач не просив зменшити анімацію (prefers-reduced-motion).
  */
 export function Manifesto() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // immediateRender:false тримає контент видимим за замовчуванням —
-        // from-стан застосовується лише коли тригер спрацював. Якщо rAF не
-        // крутиться (фонова вкладка, headless-рендер), секція лишається видимою.
-        const tl = gsap.timeline({
-          defaults: { ease: "power4.out", immediateRender: false },
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 78%",
-            once: true,
-          },
-        });
-
-        tl.from(
-          "[data-glow]",
-          { autoAlpha: 0, scale: 0.9, duration: 1.4, ease: "power2.out" },
-          0,
-        )
-          .from(
-            "[data-line]",
-            { yPercent: 115, duration: 1.1, stagger: 0.12 },
-            0,
-          )
-          .from(
-            "[data-reveal]",
-            { y: 24, autoAlpha: 0, duration: 0.9, stagger: 0.14 },
-            "-=0.55",
-          );
-      });
+  const root = useReveal(
+    (tl) => {
+      tl.from(
+        "[data-glow]",
+        { autoAlpha: 0, scale: 0.9, duration: 1.4, ease: "power2.out" },
+        0,
+      )
+        .from("[data-line]", { yPercent: 115, duration: 1.1, stagger: 0.12 }, 0)
+        .from(
+          "[data-reveal]",
+          { y: 24, autoAlpha: 0, duration: 0.9, stagger: 0.14 },
+          "-=0.55",
+        );
     },
-    { scope: root },
+    { start: "top 78%", defaults: { ease: "power4.out" } },
   );
 
   return (

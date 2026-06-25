@@ -1,13 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { useReveal } from "@/lib/use-reveal";
 
 const STEPS = [
   {
@@ -39,46 +32,31 @@ const STEPS = [
  * лише для (prefers-reduced-motion: no-preference).
  */
 export function Individual() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline({
-          defaults: { ease: "power3.out", immediateRender: false },
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 72%",
-            once: true,
+  const root = useReveal(
+    (tl) => {
+      tl.from("[data-intro]", {
+        y: 28,
+        autoAlpha: 0,
+        duration: 0.9,
+        stagger: 0.1,
+      })
+        .from(
+          "[data-step]",
+          { y: 32, autoAlpha: 0, duration: 0.8, stagger: 0.12 },
+          "-=0.4",
+        )
+        .from(
+          "[data-step-line]",
+          {
+            scaleX: 0,
+            transformOrigin: "left center",
+            duration: 0.7,
+            stagger: 0.12,
           },
-        });
-
-        tl.from("[data-intro]", {
-          y: 28,
-          autoAlpha: 0,
-          duration: 0.9,
-          stagger: 0.1,
-        })
-          .from(
-            "[data-step]",
-            { y: 32, autoAlpha: 0, duration: 0.8, stagger: 0.12 },
-            "-=0.4",
-          )
-          .from(
-            "[data-step-line]",
-            {
-              scaleX: 0,
-              transformOrigin: "left center",
-              duration: 0.7,
-              stagger: 0.12,
-            },
-            "<",
-          );
-      });
+          "<",
+        );
     },
-    { scope: root },
+    { start: "top 72%" },
   );
 
   return (

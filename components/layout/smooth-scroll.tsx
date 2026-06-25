@@ -53,7 +53,15 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ReactLenis root ref={lenisRef} options={{ autoRaf: false, lerp: 0.1 }}>
+    <ReactLenis
+      root
+      ref={lenisRef}
+      // `anchors` makes Lenis smooth-scroll same-page hash links itself; the
+      // negative offset lands targets below the sticky header (~84px) instead of
+      // under it. Lenis drives the scroll, so CSS scroll-padding-top alone is
+      // ignored — this is what actually offsets the jump.
+      options={{ autoRaf: false, lerp: 0.1, anchors: { offset: -88 } }}
+    >
       {children}
     </ReactLenis>
   );

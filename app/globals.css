@@ -166,6 +166,9 @@
   }
   html {
     @apply font-sans;
+    /* Anchor jumps (#individual, #works, #inquiry…) land below the sticky
+       header instead of under it — header is ~84px, leave a little breathing. */
+    scroll-padding-top: 5.5rem;
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
