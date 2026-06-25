@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Manrope } from "next/font/google";
 import "./globals.css";
+import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 
 const display = Playfair_Display({
   variable: "--font-display",
@@ -33,7 +36,13 @@ export default function RootLayout({
       lang="uk"
       className={`${display.variable} ${sans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">
+        <SmoothScroll>
+          <SiteHeader />
+          <main>{children}</main>
+          <SiteFooter />
+        </SmoothScroll>
+      </body>
     </html>
   );
 }
