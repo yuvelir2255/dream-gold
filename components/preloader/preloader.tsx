@@ -62,23 +62,31 @@ export function Preloader() {
       };
     }
 
-    // entrance choreography
+    // entrance choreography — fromTo (explicit visible end) so it can't get
+    // stuck hidden on React StrictMode's double-mount in dev.
     const intro = gsap.timeline();
     intro
-      .from(glow.current, {
-        autoAlpha: 0,
-        scale: 0.9,
-        duration: 1.2,
-        ease: "power2.out",
-      })
-      .from(
+      .fromTo(
+        glow.current,
+        { autoAlpha: 0, scale: 0.9 },
+        { autoAlpha: 1, scale: 1, duration: 1.2, ease: "power2.out" },
+      )
+      .fromTo(
         ringBox.current,
-        { autoAlpha: 0, scale: 0.92, duration: 1.1, ease: "power3.out" },
+        { autoAlpha: 0, scale: 0.92 },
+        { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" },
         0.1,
       )
-      .from(
+      .fromTo(
         [logo.current, tagline.current, progress.current],
-        { autoAlpha: 0, y: 16, duration: 0.7, stagger: 0.12, ease: "power3.out" },
+        { autoAlpha: 0, y: 16 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.12,
+          ease: "power3.out",
+        },
         0.55,
       );
 
