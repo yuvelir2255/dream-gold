@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, type MutableRefObject } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
 import {
-  Environment,
-  Lightformer,
-  MeshTransmissionMaterial,
-} from "@react-three/drei";
-import * as THREE from "three";
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Center, Environment, Lightformer, useGLTF } from "@react-three/drei";
 import type { Group } from "three";
 
-const GOLD = "#caa86a";
-const REFRACT_BG = new THREE.Color("#f6f0e6"); // warm ivory the diamond refracts
+const RING_URL = "/models/ring.glb";
 
 type Motion = {
   draggingRef: MutableRefObject<boolean>;
@@ -22,14 +22,14 @@ type Motion = {
 };
 
 /**
- * Gold band + brilliant diamond. The octahedron reads instantly as a cut stone;
- * MeshTransmissionMaterial gives real refraction + dispersion (it sparkles).
- * Lighting is a tiny in-memory studio env (drei Lightformers) so gold looks gold
- * and the stone has something to bend — instant and offline. Auto-spins, follows
- * the drag, keeps inertia on release, and tilts gently toward the cursor.
+ * Real ring (Higgsfield image→3D, draco + webp, ~324KB) lit by a small in-memory
+ * studio env (drei Lightformers) so the gold reads richly. `Center` re-centers the
+ * mesh at the origin; the wrapping group auto-spins, follows the drag with inertia,
+ * and tilts gently toward the cursor.
  */
 function Ring({ draggingRef, pendingRef, velRef, tiltRef, reducedRef }: Motion) {
   const group = useRef<Group>(null);
+  const { scene } = useGLTF(RING_URL);
 
   useFrame((_, delta) => {
     const g = group.current;
@@ -44,44 +44,23 @@ function Ring({ draggingRef, pendingRef, velRef, tiltRef, reducedRef }: Motion) 
       velRef.current *= 0.92;
     }
 
-    const targetX = -0.32 + (reducedRef.current ? 0 : tiltRef.current * 0.28);
+    const targetX = -0.18 + (reducedRef.current ? 0 : tiltRef.current * 0.26);
     g.rotation.x += (targetX - g.rotation.x) * 0.06;
   });
 
+  // The mesh ships already centered (~1.9 units tall); Center keeps it honest and
+  // scale is the single on-screen-size knob. (Resize mis-read the meshopt-
+  // normalized positions and scaled it out of frame.)
   return (
-    <group ref={group}>
-      <mesh>
-        <torusGeometry args={[1, 0.3, 64, 180]} />
-        <meshStandardMaterial
-          color={GOLD}
-          metalness={1}
-          roughness={0.34}
-          envMapIntensity={2.4}
-        />
-      </mesh>
-
-      <mesh position={[0, 1.2, 0]} scale={[1, 1.05, 1]}>
-        <octahedronGeometry args={[0.34, 0]} />
-        <MeshTransmissionMaterial
-          transmission={0.96}
-          thickness={0.6}
-          roughness={0.02}
-          ior={2.4}
-          chromaticAberration={0.7}
-          anisotropicBlur={0.08}
-          distortion={0.25}
-          distortionScale={0.3}
-          temporalDistortion={0.08}
-          samples={6}
-          resolution={256}
-          background={REFRACT_BG}
-          color="#eef3ff"
-          flatShading
-        />
-      </mesh>
+    <group ref={group} scale={1.6}>
+      <Center>
+        <primitive object={scene} />
+      </Center>
     </group>
   );
 }
+
+useGLTF.preload(RING_URL);
 
 export default function RingScene({
   interactingRef,
@@ -99,8 +78,6 @@ export default function RingScene({
       window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
-  // Drag start is a DOM event on the wrapper; move/up are global so the gesture
-  // survives the pointer leaving the canvas.
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
       tiltRef.current = e.clientY / window.innerHeight - 0.5;
@@ -151,16 +128,17 @@ export default function RingScene({
         <hemisphereLight args={["#fff4df", "#b89055", 0.7]} />
         <directionalLight position={[3, 4, 5]} intensity={1.1} />
 
-        <Ring
-          draggingRef={draggingRef}
-          pendingRef={pendingRef}
-          velRef={velRef}
-          tiltRef={tiltRef}
-          reducedRef={reducedRef}
-        />
+        <Suspense fallback={null}>
+          <Ring
+            draggingRef={draggingRef}
+            pendingRef={pendingRef}
+            velRef={velRef}
+            tiltRef={tiltRef}
+            reducedRef={reducedRef}
+          />
+        </Suspense>
 
         <Environment resolution={256}>
-          {/* big warm key in front so the gold reads as gold from most angles */}
           <Lightformer
             form="rect"
             intensity={3}
@@ -195,13 +173,6 @@ export default function RingScene({
             position={[4, 2, -3]}
             scale={3}
             color="#ffe9c2"
-          />
-          <Lightformer
-            form="rect"
-            intensity={2}
-            position={[-3, -2, -4]}
-            scale={5}
-            color="#f5e6c8"
           />
         </Environment>
       </Canvas>
