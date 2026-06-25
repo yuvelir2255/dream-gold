@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout/page-shell";
+import { Individual } from "@/components/sections/individual";
+import { Inquiry } from "@/components/sections/inquiry";
 
 export const metadata: Metadata = {
   title: "Індивідуальне виготовлення — Dream Gold",
   description:
-    "Створюємо прикрасу за вашим задумом — від першого ескізу до готового виробу із сертифікованим діамантом. Власне виробництво в Україні.",
+    "Створюємо прикрасу за вашим задумом — від першого ескізу до готового виробу із сертифікованим діамантом. Власне виробництво в Україні, виготовлення 2–4 тижні.",
 };
 
 export default function IndividualPage() {
   return (
-    <PageShell
-      label="Індивідуальне виготовлення"
-      title="Створюємо прикрасу за вашим задумом"
-      intro="Маєте готову ідею, фото або лише натхнення — ми пройдемо з вами весь шлях від першого ескізу до виробу, який ви триматимете в руках. Виготовлення — 2–4 тижні."
-      note="Детальна сторінка процесу — незабаром"
-    />
+    <>
+      <Individual />
+      <Inquiry />
+    </>
   );
 }

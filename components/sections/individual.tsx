@@ -67,7 +67,7 @@ export function Individual() {
       aria-labelledby="individual-heading"
       className="bg-cream text-ink"
     >
-      <div className="mx-auto w-full max-w-[1400px] px-6 py-[var(--s-section)] lg:px-10">
+      <div className="mx-auto w-full max-w-[1400px] px-6 pb-[var(--s-section)] pt-[clamp(7rem,14vh,11rem)] lg:px-10">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
           {/* Оффер — закріплений на широких екранах */}
           <div className="lg:sticky lg:top-28 lg:self-start">
