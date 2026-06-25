@@ -42,6 +42,9 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
     ScrollTrigger.refresh();
+    // Web fonts swap in after first paint and shift layout — recompute trigger
+    // positions once they're ready so section reveals fire at the right scroll.
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
     return () => {
       gsap.ticker.remove(update);

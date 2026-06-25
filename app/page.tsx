@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Manifesto } from "@/components/sections/manifesto";
+import { Individual } from "@/components/sections/individual";
+import { Works } from "@/components/sections/works";
 
 export default function Home() {
   return (
@@ -43,6 +45,8 @@ export default function Home() {
       </section>
 
       <Manifesto />
+      <Individual />
+      <Works />
     </>
   );
 }
