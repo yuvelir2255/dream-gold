@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dream Gold — сайт-вітрина ювелірного бренду
 
-## Getting Started
+Преміум-сайт авторського ювелірного бренду **Dream Gold** (Україна): вітрина виробів + індивідуальні замовлення. Модель — «вітрина + заявка», **без онлайн-оплати і без цін на сайті**. Контент — українською, звертання до клієнта на «ви». Ціль — рівень Awwwards.
 
-First, run the development server:
+## Стек
+
+- **Next.js 16** (App Router) + **React 19** + **TypeScript** (strict)
+- **Tailwind CSS v4** + **shadcn/ui** (Radix) + **Lucide**
+- Анімація: **GSAP** (+ `@gsap/react`) + **Lenis** (smooth scroll)
+- 3D точково: **react-three-fiber** + `drei` + `postprocessing`
+- Backend/CMS (план): **Payload v3** + **Postgres**
+- Деплой: **Vercel** (пізніше)
+
+## Команди
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev        # дев-сервер (Turbopack) → http://localhost:3000
+npm run build      # прод-збірка
+npm run lint       # ESLint
+npx tsc --noEmit   # перевірка типів
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Структура
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/                 App Router: layout, globals.css (дизайн-токени), page.tsx (головна)
+components/
+  layout/            header, footer, smooth-scroll (Lenis + GSAP)
+  sections/          секції головної: manifesto, individual, works …
+  brand/             логотип (CSS-mask, currentColor)
+public/images/       зображення (hero, галерея works)
+assets/products/     вихідні референси виробів (не публікуються)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Дизайн-система
 
-## Learn More
+Токени в `app/globals.css`: палітра (`ivory` / `cream` / `sand` / `ink` / `gold` …), шрифти **Playfair Display** (заголовки) + **Manrope** (текст) — обидва з кирилицею, флюїдна типошкала, motion-токени. Темні секції — обгортка `.dark` (теплий графіт).
 
-To learn more about Next.js, take a look at the following resources:
+## Статус
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Головна (зверху вниз): **hero → маніфест → індивідуальне виготовлення → вибрані роботи → footer**.
+Далі: обручки та заручини, майстерність, шоурум, відгуки, форма заявки; прелоадер (3D); бекенд (Payload + кабінет).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Конвенції
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+TypeScript strict (без `any`); a11y та `prefers-reduced-motion` на важких анімаціях; мобайл — пріоритет (LCP < 1.5s, CLS < 0.05, INP < 100ms); секрети тільки в `.env*`; код — у стилі оточення.
