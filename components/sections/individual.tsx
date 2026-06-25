@@ -78,7 +78,9 @@ export function Individual() {
               Індивідуальне виготовлення
             </p>
 
-            <h2
+            {/* h1 — this is the page heading on /individual (visual size kept at
+                text-h2 so the verified layout doesn't change). */}
+            <h1
               data-intro
               id="individual-heading"
               className="mt-4 text-balance font-display text-h2 leading-[1.1] text-ink"
@@ -87,7 +89,7 @@ export function Individual() {
               <em className="font-display italic text-gold-deep">
                 за вашим задумом
               </em>
-            </h2>
+            </h1>
 
             <p
               data-intro
