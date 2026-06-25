@@ -183,3 +183,25 @@
     color: var(--ink);
   }
 }
+
+/* Page-change reveal — replayed on each route via the keyed RouteTransition. */
+@keyframes route-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.route-enter {
+  animation: route-enter 0.55s var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-enter {
+    animation: none;
+  }
+}

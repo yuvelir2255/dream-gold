@@ -2,28 +2,31 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLenis } from "lenis/react";
 import { Heart, Menu, User, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { useInquiry } from "@/components/inquiry/inquiry-provider";
 
 const NAV = [
-  { label: "Індивідуальне", href: "#individual" },
-  { label: "Обручки", href: "#engagement" },
-  { label: "Роботи", href: "#works" },
-  { label: "Майстерність", href: "#craft" },
-  { label: "Про нас", href: "#about" },
-  { label: "Шоурум", href: "#showroom" },
-  { label: "Контакти", href: "#contacts" },
+  { label: "Каталог", href: "/catalog" },
+  { label: "Індивідуальне", href: "/individual" },
+  { label: "Про нас", href: "/about" },
 ];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const { open: openInquiry } = useInquiry();
 
   // Transparent over the hero, then an ivory/blur bar fades in once scrolled.
   // The bar also restores legibility over the dark sections (#manifesto,
   // #inquiry) — without it the ink-muted nav vanishes on the graphite.
   useLenis(({ scroll }) => setScrolled(scroll > 8));
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <header className="sticky top-0 z-40">
@@ -45,7 +48,12 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-[13px] tracking-wide text-ink-muted transition-colors hover:text-ink"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={`relative text-[13px] tracking-wide transition-colors ${
+                isActive(item.href)
+                  ? "text-ink after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:bg-gold"
+                  : "text-ink-muted hover:text-ink"
+              }`}
             >
               {item.label}
             </Link>
@@ -54,25 +62,26 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="#wishlist"
+            href="/wishlist"
             aria-label="Збережене"
             className="hidden text-ink-muted transition-colors hover:text-ink sm:inline-flex"
           >
             <Heart className="size-5" strokeWidth={1.5} />
           </Link>
           <Link
-            href="#account"
+            href="/account"
             aria-label="Кабінет"
             className="hidden text-ink-muted transition-colors hover:text-ink sm:inline-flex"
           >
             <User className="size-5" strokeWidth={1.5} />
           </Link>
-          <Link
-            href="#inquiry"
+          <button
+            type="button"
+            onClick={openInquiry}
             className="hidden bg-gold px-5 py-2.5 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream sm:inline-flex"
           >
             Залишити заявку
-          </Link>
+          </button>
           <button
             type="button"
             aria-label="Відкрити меню"
@@ -104,19 +113,25 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="font-display text-2xl text-ink"
+                aria-current={isActive(item.href) ? "page" : undefined}
+                className={`font-display text-2xl transition-colors ${
+                  isActive(item.href) ? "text-gold-deep" : "text-ink"
+                }`}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
-          <Link
-            href="#inquiry"
-            onClick={() => setOpen(false)}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              openInquiry();
+            }}
             className="mt-auto bg-gold px-5 py-4 text-center text-eyebrow font-medium uppercase tracking-[0.18em] text-ink"
           >
             Залишити заявку
-          </Link>
+          </button>
         </div>
       )}
     </header>

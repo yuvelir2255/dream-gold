@@ -1,6 +1,7 @@
 "use client";
 
 import { useReveal } from "@/lib/use-reveal";
+import { InquiryCta } from "@/components/inquiry/inquiry-cta";
 
 const STEPS = [
   {
@@ -101,12 +102,7 @@ export function Individual() {
               data-intro
               className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4"
             >
-              <a
-                href="#inquiry"
-                className="inline-flex bg-gold px-7 py-3.5 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream"
-              >
-                Залишити заявку
-              </a>
+              <InquiryCta className="inline-flex bg-gold px-7 py-3.5 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream" />
               <span className="text-sm text-ink-muted">
                 Виготовлення — 2–4 тижні
               </span>
