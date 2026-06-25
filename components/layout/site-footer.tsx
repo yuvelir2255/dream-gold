@@ -3,7 +3,7 @@ import { Logo } from "@/components/brand/logo";
 
 export function SiteFooter() {
   return (
-    <footer id="contacts" className="bg-sand text-ink">
+    <footer className="bg-sand text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-6 py-16 lg:px-10">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
@@ -18,17 +18,20 @@ export function SiteFooter() {
             <span className="mb-2 text-eyebrow uppercase tracking-[0.18em] text-ink-faint">
               Розділи
             </span>
-            <Link href="#individual" className="transition-colors hover:text-ink">
+            <Link href="/catalog" className="transition-colors hover:text-ink">
+              Каталог
+            </Link>
+            <Link href="/individual" className="transition-colors hover:text-ink">
               Індивідуальне виготовлення
             </Link>
-            <Link href="#works" className="transition-colors hover:text-ink">
-              Роботи
+            <Link href="/about" className="transition-colors hover:text-ink">
+              Про нас
             </Link>
-            <Link href="#craft" className="transition-colors hover:text-ink">
-              Майстерність
-            </Link>
-            <Link href="#showroom" className="transition-colors hover:text-ink">
+            <Link href="/showroom" className="transition-colors hover:text-ink">
               Шоурум · Харків
+            </Link>
+            <Link href="/contacts" className="transition-colors hover:text-ink">
+              Контакти
             </Link>
           </nav>
 
