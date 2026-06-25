@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 import { Heart, Menu, User, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 
@@ -17,10 +18,24 @@ const NAV = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Transparent over the hero, then an ivory/blur bar fades in once scrolled.
+  // The bar also restores legibility over the dark sections (#manifesto,
+  // #inquiry) — without it the ink-muted nav vanishes on the graphite.
+  useLenis(({ scroll }) => setScrolled(scroll > 8));
 
   return (
     <header className="sticky top-0 z-40">
-      <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-6 px-6 py-5 lg:px-10">
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          scrolled
+            ? "border-line/70 bg-ivory/80 shadow-[0_1px_30px_-12px_rgba(26,23,20,0.3)] backdrop-blur-md"
+            : "border-transparent bg-transparent"
+        }`}
+      />
+      <div className="relative mx-auto flex w-full max-w-[1400px] items-center justify-between gap-6 px-6 py-5 lg:px-10">
         <Link href="/" aria-label="Dream Gold — головна" className="text-ink">
           <Logo className="h-11 w-11" />
         </Link>

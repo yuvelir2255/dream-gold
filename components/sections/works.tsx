@@ -1,15 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { useReveal } from "@/lib/use-reveal";
 
 const WORKS = [
   {
@@ -56,32 +49,18 @@ const WORKS = [
  * Середня колонка зміщена вниз для ритму. Контент видимий за замовчуванням.
  */
 export function Works() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline({
-          defaults: { ease: "power3.out", immediateRender: false },
-          scrollTrigger: { trigger: root.current, start: "top 75%", once: true },
-        });
-
-        tl.from("[data-reveal]", {
-          y: 24,
-          autoAlpha: 0,
-          duration: 0.8,
-          stagger: 0.1,
-        }).from(
-          "[data-card]",
-          { y: 44, autoAlpha: 0, duration: 0.9, stagger: 0.12 },
-          "-=0.3",
-        );
-      });
-    },
-    { scope: root },
-  );
+  const root = useReveal((tl) => {
+    tl.from("[data-reveal]", {
+      y: 24,
+      autoAlpha: 0,
+      duration: 0.8,
+      stagger: 0.1,
+    }).from(
+      "[data-card]",
+      { y: 44, autoAlpha: 0, duration: 0.9, stagger: 0.12 },
+      "-=0.3",
+    );
+  });
 
   return (
     <section
