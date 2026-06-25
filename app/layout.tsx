@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { RouteTransition } from "@/components/layout/route-transition";
 import { InquiryProvider } from "@/components/inquiry/inquiry-provider";
+import { Preloader } from "@/components/preloader/preloader";
 
 const display = Playfair_Display({
   variable: "--font-display",
@@ -46,6 +47,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <SmoothScroll>
           <InquiryProvider>
+            <Preloader />
             <SiteHeader />
             <main>
               <RouteTransition>{children}</RouteTransition>
