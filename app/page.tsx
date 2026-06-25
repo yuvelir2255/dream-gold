@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Manifesto } from "@/components/sections/manifesto";
-import { Individual } from "@/components/sections/individual";
+import { Explore } from "@/components/sections/explore";
 import { Works } from "@/components/sections/works";
 import { Inquiry } from "@/components/sections/inquiry";
 import { InquiryCta } from "@/components/inquiry/inquiry-cta";
@@ -53,7 +53,7 @@ export default function Home() {
       </section>
 
       <Manifesto />
-      <Individual />
+      <Explore />
       <Works />
       <Inquiry />
     </>
