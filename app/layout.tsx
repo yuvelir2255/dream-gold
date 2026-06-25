@@ -23,6 +23,11 @@ const sans = Manrope({
 });
 
 export const metadata: Metadata = {
+  // Resolves OG/Twitter image URLs. Swap NEXT_PUBLIC_SITE_URL in once the
+  // domain is bought; falls back to localhost in dev.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: "Dream Gold — авторські ювелірні прикраси на замовлення",
   description:
     "Dream Gold — авторські ювелірні вироби ручної роботи. Втілюємо будь-яку ідею: від ескізу до готового виробу із сертифікованим діамантом. Власне виробництво в Україні.",
