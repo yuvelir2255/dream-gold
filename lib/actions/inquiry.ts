@@ -133,11 +133,15 @@ export async function submitInquiry(
   const message = readField(formData, "message");
   const values: Record<InquiryField, string> = { name, contact, message };
 
+  // Lower + upper bounds (upper mirrors the web_inquiries RLS CHECK; guards
+  // against oversized payloads / flooding).
   const fieldErrors: InquiryState["fieldErrors"] = {};
-  if (name.length < 2) fieldErrors.name = "Вкажіть, як до вас звертатися.";
-  if (contact.length < 5)
+  if (name.length < 2 || name.length > 120)
+    fieldErrors.name = "Вкажіть, як до вас звертатися.";
+  if (contact.length < 5 || contact.length > 120)
     fieldErrors.contact = "Вкажіть телефон або Telegram для звʼязку.";
-  if (message.length < 5) fieldErrors.message = "Опишіть коротко вашу ідею.";
+  if (message.length < 5 || message.length > 4000)
+    fieldErrors.message = "Опишіть вашу ідею (до 4000 символів).";
 
   if (Object.keys(fieldErrors).length > 0) {
     return { status: "error", fieldErrors, values };
