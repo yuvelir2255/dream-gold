@@ -192,6 +192,7 @@ export type Database = {
           name: string
           source: string
           status: string
+          user_id: string | null
         }
         Insert: {
           contact: string
@@ -202,6 +203,7 @@ export type Database = {
           name: string
           source?: string
           status?: string
+          user_id?: string | null
         }
         Update: {
           contact?: string
@@ -212,6 +214,25 @@ export type Database = {
           name?: string
           source?: string
           status?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      wishlist: {
+        Row: {
+          created_at: string
+          product_slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          product_slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          product_slug?: string
+          user_id?: string
         }
         Relationships: []
       }

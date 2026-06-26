@@ -4,8 +4,11 @@ import { Explore } from "@/components/sections/explore";
 import { Works } from "@/components/sections/works";
 import { Inquiry } from "@/components/sections/inquiry";
 import { InquiryCta } from "@/components/inquiry/inquiry-cta";
+import { getWishlist } from "@/lib/wishlist";
 
-export default function Home() {
+export default async function Home() {
+  const { authed, slugs } = await getWishlist();
+
   return (
     <>
       <section className="relative min-h-[calc(100dvh-var(--header-h))] w-full overflow-hidden">
@@ -54,7 +57,7 @@ export default function Home() {
 
       <Manifesto />
       <Explore />
-      <Works />
+      <Works authed={authed} savedSlugs={slugs} />
       <Inquiry />
     </>
   );
