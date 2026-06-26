@@ -1,8 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  // three ships untranspiled ESM — Next must transpile it for R3F (preloader).
-  transpilePackages: ["three"],
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

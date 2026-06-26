@@ -6,24 +6,17 @@
  * collection and the array is swapped for a query.
  */
 
-export type Category =
-  | "Каблучки"
-  | "Сережки"
-  | "Підвіски"
-  | "Браслети"
-  | "Ланцюжки"
-  | "Кольє"
-  | "Обручки";
+// Only categories that have pieces today. Підвіски / Ланцюжки / Обручки return
+// here the moment their stills land (gated on the imagery pipeline) — keeping
+// empty categories out avoids dead filter chips and dangling union members.
+export type Category = "Каблучки" | "Сережки" | "Браслети" | "Кольє";
 
 /** Canonical display order for category chips / sections. */
 export const CATEGORY_ORDER: Category[] = [
   "Каблучки",
   "Сережки",
-  "Підвіски",
   "Браслети",
-  "Ланцюжки",
   "Кольє",
-  "Обручки",
 ];
 
 export type ProductDetail = { label: string; value: string };
