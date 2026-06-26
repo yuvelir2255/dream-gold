@@ -1,7 +1,7 @@
 "use client";
 
-import { Send, Phone } from "lucide-react";
 import { useReveal } from "@/lib/use-reveal";
+import { InquiryForm } from "@/components/inquiry/inquiry-form";
 
 /**
  * Заявка — конверсійний фінал сторінки на тлі тёплого графіту (рима з
@@ -72,29 +72,8 @@ export function Inquiry() {
             </p>
           </div>
 
-          <div data-reveal className="flex flex-col gap-4 lg:items-end">
-            <a
-              href="https://t.me/IrinaBabii1982"
-              className="group inline-flex w-full items-center justify-center gap-2.5 bg-gold px-8 py-4 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream sm:w-auto"
-            >
-              <Send
-                className="size-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                strokeWidth={1.5}
-              />
-              Написати в Telegram
-            </a>
-
-            <a
-              href="tel:+380672605244"
-              className="inline-flex w-full items-center justify-center gap-2.5 border border-border px-8 py-4 text-eyebrow font-medium uppercase tracking-[0.18em] text-foreground transition-colors hover:border-gold hover:text-gold sm:w-auto"
-            >
-              <Phone className="size-4" strokeWidth={1.5} />
-              +380 67 260 52 44
-            </a>
-
-            <p className="mt-1 text-sm text-muted-foreground lg:text-right">
-              Виготовлення — 2–4 тижні · Доставка по світу
-            </p>
+          <div data-reveal>
+            <InquiryForm />
           </div>
         </div>
       </div>

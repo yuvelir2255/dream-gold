@@ -10,6 +10,7 @@ import {
 import { Dialog } from "radix-ui";
 import { Send, Phone, X } from "lucide-react";
 import { useLenis } from "lenis/react";
+import { InquiryForm } from "@/components/inquiry/inquiry-form";
 
 type InquiryContext = {
   /** Open the global inquiry drawer (any «Залишити заявку» CTA). */
@@ -82,35 +83,36 @@ export function InquiryProvider({ children }: { children: React.ReactNode }) {
                 <em className="font-display italic text-gold">вашу ідею</em>
               </h2>
               <Dialog.Description className="mt-5 text-pretty font-light leading-relaxed text-muted-foreground">
-                Надішліть фото, ескіз або просто опишіть задум — ми відповімо,
-                підготуємо ескіз і прорахунок вартості. Найшвидше — у Telegram.
+                Опишіть задум — ми відповімо, підготуємо ескіз і прорахунок
+                вартості.
               </Dialog.Description>
 
-              <div className="mt-8 flex flex-col gap-3">
-                <a
-                  href="https://t.me/IrinaBabii1982"
-                  className="group inline-flex items-center justify-center gap-2.5 bg-gold px-7 py-4 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream"
-                >
-                  <Send
-                    className="size-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    strokeWidth={1.5}
-                  />
-                  Написати в Telegram
-                </a>
-                <a
-                  href="tel:+380672605244"
-                  className="inline-flex items-center justify-center gap-2.5 border border-border px-7 py-4 text-eyebrow font-medium uppercase tracking-[0.18em] text-foreground transition-colors hover:border-gold hover:text-gold"
-                >
-                  <Phone className="size-4" strokeWidth={1.5} />
-                  +380 67 260 52 44
-                </a>
-              </div>
+              <InquiryForm className="mt-8" />
 
-              <p className="mt-auto pt-8 text-sm leading-relaxed text-muted-foreground">
-                Виготовлення — 2–4 тижні · Доставка по світу.
-                <br />
-                Форму з полями для ідеї додамо незабаром.
-              </p>
+              <div className="mt-auto border-t border-border pt-6">
+                <p className="text-sm text-muted-foreground">
+                  Або напишіть напряму — найшвидше у Telegram:
+                </p>
+                <div className="mt-4 flex flex-col gap-3">
+                  <a
+                    href="https://t.me/IrinaBabii1982"
+                    className="group inline-flex items-center justify-center gap-2.5 border border-border px-7 py-4 text-eyebrow font-medium uppercase tracking-[0.18em] text-foreground transition-colors hover:border-gold hover:text-gold"
+                  >
+                    <Send
+                      className="size-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      strokeWidth={1.5}
+                    />
+                    Написати в Telegram
+                  </a>
+                  <a
+                    href="tel:+380672605244"
+                    className="inline-flex items-center justify-center gap-2.5 border border-border px-7 py-4 text-eyebrow font-medium uppercase tracking-[0.18em] text-foreground transition-colors hover:border-gold hover:text-gold"
+                  >
+                    <Phone className="size-4" strokeWidth={1.5} />
+                    +380 67 260 52 44
+                  </a>
+                </div>
+              </div>
             </div>
           </Dialog.Content>
         </Dialog.Portal>

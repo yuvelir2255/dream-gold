@@ -20,6 +20,22 @@ npm run lint       # ESLint
 npx tsc --noEmit   # перевірка типів
 ```
 
+## Змінні оточення
+
+Форма заявки доставляє ліди в Telegram бренду через Bot API. Додайте у `.env.local`
+(а на проді — у налаштуваннях Vercel):
+
+```bash
+TELEGRAM_BOT_TOKEN=   # токен бота з @BotFather
+TELEGRAM_CHAT_ID=     # chat id отримувача заявок (особа або група)
+NEXT_PUBLIC_SITE_URL= # повний URL сайту (для metadataBase / sitemap / OG), напр. https://dreamgold.ua
+```
+
+Як отримати `TELEGRAM_CHAT_ID`: створіть бота в @BotFather, напишіть йому будь-що,
+відкрийте `https://api.telegram.org/bot<TOKEN>/getUpdates` і візьміть `chat.id` з відповіді
+(для групи — додайте бота в групу й використайте її `id`). Без цих змінних форма
+покаже коректну помилку й запропонує написати напряму в Telegram.
+
 ## Структура
 
 ```
