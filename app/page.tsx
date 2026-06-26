@@ -8,7 +8,7 @@ import { InquiryCta } from "@/components/inquiry/inquiry-cta";
 export default function Home() {
   return (
     <>
-      <section className="relative min-h-[calc(100dvh-84px)] w-full overflow-hidden">
+      <section className="relative min-h-[calc(100dvh-var(--header-h))] w-full overflow-hidden">
         {/*
           object-position is responsive: on phones/tablets the виріб sits to the
           right of the frame, so we pull the crop toward it (a jewellery hero
@@ -32,7 +32,7 @@ export default function Home() {
         */}
         <div className="absolute inset-0 bg-gradient-to-t from-ivory via-ivory/55 to-transparent sm:via-ivory/45 lg:bg-gradient-to-l lg:via-ivory/40" />
 
-        <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-84px)] w-full max-w-[1400px] flex-col justify-end px-6 pb-[clamp(3rem,8vh,5rem)] lg:flex-row lg:items-center lg:justify-end lg:px-10 lg:pb-0">
+        <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-var(--header-h))] w-full max-w-[1400px] flex-col justify-end px-6 pb-[clamp(3rem,8vh,5rem)] lg:flex-row lg:items-center lg:justify-end lg:px-10 lg:pb-0">
           <div className="max-w-md text-left lg:text-right">
             <p className="text-eyebrow font-medium uppercase tracking-[0.22em] text-gold-deep">
               Ювелірний дім · Україна

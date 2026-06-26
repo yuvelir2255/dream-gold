@@ -85,6 +85,11 @@
   --gold-deep: #9c7f4a;
   --gold-soft: #eadcc2;
 
+  /* sticky header height — single source for hero min-h, scroll-padding and
+     the Lenis anchor offset (was a scattered 84px / 88px / 5.5rem). py-5 (2.5rem)
+     + logo h-11 (2.75rem) = 5.25rem ≈ 84px. */
+  --header-h: 5.25rem;
+
   /* section rhythm + motion */
   --s-section: clamp(4rem, 10vw, 8rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -167,8 +172,8 @@
   html {
     @apply font-sans;
     /* Anchor jumps (#individual, #works, #inquiry…) land below the sticky
-       header instead of under it — header is ~84px, leave a little breathing. */
-    scroll-padding-top: 5.5rem;
+       header instead of under it — driven by the shared --header-h token. */
+    scroll-padding-top: calc(var(--header-h) + 0.25rem);
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
@@ -204,4 +209,15 @@
   .route-enter {
     animation: none;
   }
+}
+
+/* First-load preloader gate. The inline script in <head> tags <html> before
+   first paint: `dg-preloading` on a fresh session (lock scroll, no FOUC of the
+   hero under the overlay) or `dg-preloaded` on repeat loads (hide the overlay
+   outright so it never flashes before the client removes it). */
+html.dg-preloading {
+  overflow: hidden;
+}
+html.dg-preloaded #dg-preloader {
+  display: none;
 }

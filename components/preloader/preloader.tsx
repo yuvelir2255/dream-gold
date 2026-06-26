@@ -7,6 +7,10 @@ import { Logo } from "@/components/brand/logo";
 
 const RING_SRC = "/images/preloader-ring.webp";
 
+/** sessionStorage flag — written once the brand moment finishes so it plays a
+ *  single time per visit (refreshes / deep-links in the same tab skip it). */
+const SEEN_KEY = "dg-preloaded";
+
 const GRAIN =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
@@ -25,11 +29,20 @@ const RING_MASK = {
  * First-load brand moment, all 2D: the photoreal solitaire (Higgsfield image,
  * background removed) breathes, a gold light sweeps across it (masked to the
  * ring), and it tilts toward the cursor for a hint of depth. A 0→100 counter
- * paces the beat, then a curtain lifts to the hero. Mounted in layout → plays
- * once per full load. prefers-reduced-motion: no motion, a short fade only.
+ * paces the beat, then a curtain lifts to the hero.
  *
- * fromTo (not from) everywhere so the choreography can't get stuck hidden on
- * React StrictMode's dev double-mount; gsap.context() reverts cleanly between.
+ * Plays once per session: the inline script in <head> (layout) tags <html>
+ * before first paint — `dg-preloading` locks scroll with no FOUC of the hero
+ * under the overlay, `dg-preloaded` hides the overlay outright on repeat loads
+ * so it never flashes. The session flag is written only on finish, so React's
+ * StrictMode dev double-mount still plays through.
+ *
+ * Scroll lock lives on the `dg-preloading` CSS class, not on Lenis — so a Lenis
+ * instance that arrives late (or is recreated by HMR) can never strand the
+ * overlay. Lenis is just paused/resumed as a courtesy through a ref.
+ *
+ * fromTo (not from) everywhere so the choreography can't get stuck hidden on the
+ * StrictMode double-mount; gsap.context() reverts cleanly between.
  */
 export function Preloader() {
   const [done, setDone] = useState(false);
@@ -42,32 +55,76 @@ export function Preloader() {
   const progress = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
   const counter = useRef<HTMLSpanElement>(null);
+
+  // Lenis read lazily (it may be null at mount): the lock is the CSS class, so
+  // Lenis is only paused/resumed as a courtesy. Kept in a ref, synced in an
+  // effect (never written during render).
   const lenis = useLenis();
+  const lenisRef = useRef(lenis);
+  const playedRef = useRef(false); // did THIS mount actually run the choreography?
 
   useEffect(() => {
+    lenisRef.current = lenis;
+  }, [lenis]);
+
+  // Pause momentum while the overlay is up (incl. a Lenis that arrives late),
+  // resume + reset to top once it lifts. No-op on a repeat visit (playedRef
+  // stays false), so a deep-link keeps the browser's restored scroll position.
+  useEffect(() => {
+    if (!playedRef.current) return;
+    if (done) {
+      lenisRef.current?.start();
+      lenisRef.current?.scrollTo(0, { immediate: true });
+    } else {
+      lenis?.stop();
+    }
+  }, [lenis, done]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    let alreadySeen = false;
+    try {
+      alreadySeen = !!sessionStorage.getItem(SEEN_KEY);
+    } catch {
+      alreadySeen = false;
+    }
+    if (alreadySeen) {
+      // Overlay is already CSS-hidden (dg-preloaded) — drop it next frame
+      // instead of setting state synchronously inside the effect.
+      root.classList.remove("dg-preloading");
+      const raf = requestAnimationFrame(() => setDone(true));
+      return () => cancelAnimationFrame(raf);
+    }
+
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    lenis?.stop();
-    document.documentElement.style.overflow = "hidden";
+    playedRef.current = true;
+    root.classList.add("dg-preloading"); // ensure the lock even if the inline script never ran
+    lenisRef.current?.stop();
 
     const finish = () => {
-      document.documentElement.style.overflow = "";
-      lenis?.start();
-      lenis?.scrollTo(0, { immediate: true });
-      setDone(true);
+      try {
+        sessionStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        /* private mode — just replay next load */
+      }
+      root.classList.remove("dg-preloading");
+      setDone(true); // Lenis resume + scroll reset handled by the effect above
     };
 
     if (prefersReduced) {
       const tween = gsap.to(overlay.current, {
         autoAlpha: 0,
         duration: 0.4,
-        delay: 0.4,
+        delay: 0.3,
         onComplete: finish,
       });
       return () => {
         tween.kill();
+        root.classList.remove("dg-preloading");
       };
     }
 
@@ -76,7 +133,7 @@ export function Preloader() {
       gsap.fromTo(
         glow.current,
         { autoAlpha: 0, scale: 0.9 },
-        { autoAlpha: 1, scale: 1, duration: 1.3, ease: "power2.out" },
+        { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power2.out" },
       );
       gsap.fromTo(
         ring.current,
@@ -85,9 +142,9 @@ export function Preloader() {
           autoAlpha: 1,
           scale: 1,
           y: 0,
-          duration: 1.3,
+          duration: 1.1,
           ease: "power3.out",
-          delay: 0.15,
+          delay: 0.1,
         },
       );
       gsap.fromTo(
@@ -96,21 +153,21 @@ export function Preloader() {
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.8,
-          stagger: 0.14,
+          duration: 0.7,
+          stagger: 0.12,
           ease: "power3.out",
-          delay: 0.7,
+          delay: 0.5,
         },
       );
 
       // gentle breathe
       gsap.to(ring.current, {
         scale: 1.035,
-        duration: 3.4,
+        duration: 3.0,
         ease: "sine.inOut",
         yoyo: true,
         repeat: -1,
-        delay: 1.4,
+        delay: 1.0,
       });
 
       // gold light sweeping across the ring (masked to its shape)
@@ -119,19 +176,19 @@ export function Preloader() {
         { xPercent: -130 },
         {
           xPercent: 130,
-          duration: 2.4,
+          duration: 2.0,
           ease: "power1.inOut",
           repeat: -1,
-          repeatDelay: 1.6,
-          delay: 1.6,
+          repeatDelay: 1.2,
+          delay: 1.2,
         },
       );
 
-      // counter + line, started once the progress row is visible so it reads 0→100
+      // counter + line, paced so 0→100 lands just before the curtain lifts
       gsap.fromTo(
         bar.current,
         { scaleX: 0 },
-        { scaleX: 1, duration: 2.1, ease: "power1.inOut", delay: 0.85 },
+        { scaleX: 1, duration: 1.4, ease: "power1.inOut", delay: 0.5 },
       );
       const c = { v: 0 };
       gsap.fromTo(
@@ -139,9 +196,9 @@ export function Preloader() {
         { v: 0 },
         {
           v: 100,
-          duration: 2.1,
+          duration: 1.4,
           ease: "power1.inOut",
-          delay: 0.85,
+          delay: 0.5,
           onUpdate: () => {
             if (counter.current)
               counter.current.textContent = String(Math.round(c.v));
@@ -179,7 +236,7 @@ export function Preloader() {
     };
 
     let cancelled = false;
-    const minTime = new Promise((r) => setTimeout(r, 3200));
+    const minTime = new Promise((r) => setTimeout(r, 2200));
     const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
     Promise.all([minTime, fonts]).then(() => {
       if (!cancelled) reveal();
@@ -189,15 +246,16 @@ export function Preloader() {
       cancelled = true;
       window.removeEventListener("pointermove", onMove);
       ctx.revert();
-      document.documentElement.style.overflow = "";
+      root.classList.remove("dg-preloading");
     };
-  }, [lenis]);
+  }, []);
 
   if (done) return null;
 
   return (
     <div
       ref={overlay}
+      id="dg-preloader"
       aria-hidden
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-ivory text-ink shadow-[0_40px_80px_-24px_rgba(26,23,20,0.32)]"
     >
@@ -225,6 +283,7 @@ export function Preloader() {
             src={RING_SRC}
             alt=""
             aria-hidden
+            fetchPriority="high"
             className="h-full w-full object-contain drop-shadow-[0_24px_40px_rgba(26,23,20,0.22)]"
           />
           {/* gold sweep, clipped to the ring */}
