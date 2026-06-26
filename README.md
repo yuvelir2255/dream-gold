@@ -29,7 +29,15 @@ npx tsc --noEmit   # перевірка типів
 TELEGRAM_BOT_TOKEN=   # токен бота з @BotFather
 TELEGRAM_CHAT_ID=     # chat id отримувача заявок (особа або група)
 NEXT_PUBLIC_SITE_URL= # повний URL сайту (для metadataBase / sitemap / OG), напр. https://dreamgold.ua
+
+# Supabase (зберігання заявок у web_inquiries; згодом — авторизація/кабінет)
+NEXT_PUBLIC_SUPABASE_URL=        # напр. https://<ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=   # publishable key (sb_publishable_…), безпечний для браузера
 ```
+
+Заявка з форми пишеться у Telegram **і** в таблицю `web_inquiries` (best-effort —
+успіх, якщо спрацював хоч один канал). Читання лідів — лише через Supabase Studio
+або service-role; публічний ключ має право тільки на `insert` (RLS).
 
 Як отримати `TELEGRAM_CHAT_ID`: створіть бота в @BotFather, напишіть йому будь-що,
 відкрийте `https://api.telegram.org/bot<TOKEN>/getUpdates` і візьміть `chat.id` з відповіді
