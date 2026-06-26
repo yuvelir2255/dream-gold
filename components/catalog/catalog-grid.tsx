@@ -15,9 +15,13 @@ type Filter = Category | "Усі";
 export function CatalogGrid({
   products,
   categories,
+  authed = false,
+  savedSlugs = [],
 }: {
   products: Product[];
   categories: Category[];
+  authed?: boolean;
+  savedSlugs?: string[];
 }) {
   const [active, setActive] = useState<Filter>("Усі");
   const filters: Filter[] = ["Усі", ...categories];
@@ -53,7 +57,11 @@ export function CatalogGrid({
             key={p.slug}
             className={active === "Усі" && i % 3 === 1 ? "lg:mt-20" : undefined}
           >
-            <ProductCard product={p} />
+            <ProductCard
+              product={p}
+              authed={authed}
+              saved={savedSlugs.includes(p.slug)}
+            />
           </li>
         ))}
       </ul>

@@ -11,7 +11,13 @@ import { PRODUCTS } from "@/lib/catalog";
  * сторінки виробів (`/catalog/[slug]`), заголовок — у повний каталог. Дані
  * спільні з каталогом (`lib/catalog`). Середня колонка зміщена вниз для ритму.
  */
-export function Works() {
+export function Works({
+  authed = false,
+  savedSlugs = [],
+}: {
+  authed?: boolean;
+  savedSlugs?: string[];
+} = {}) {
   const root = useReveal((tl) => {
     tl.from("[data-reveal]", {
       y: 24,
@@ -66,7 +72,11 @@ export function Works() {
               data-card
               className={i % 3 === 1 ? "lg:mt-20" : undefined}
             >
-              <ProductCard product={p} />
+              <ProductCard
+                product={p}
+                authed={authed}
+                saved={savedSlugs.includes(p.slug)}
+              />
             </li>
           ))}
         </ul>

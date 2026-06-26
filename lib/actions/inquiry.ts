@@ -101,12 +101,17 @@ async function saveToDatabase(
 
   try {
     const supabase = await createClient();
+    // Attach the signed-in user (if any) so it shows under "Мої заявки".
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     // No .select() — RLS allows insert only, not read back.
     const { error } = await supabase.from("web_inquiries").insert({
       name: lead.name,
       contact: lead.contact,
       message: lead.message,
       delivered_telegram: deliveredTelegram,
+      user_id: user?.id ?? null,
     });
     if (error) {
       console.error("[inquiry] supabase insert failed", error.message);

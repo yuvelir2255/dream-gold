@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CatalogGrid } from "@/components/catalog/catalog-grid";
 import { PRODUCTS, getCategoriesWithProducts } from "@/lib/catalog";
+import { getWishlist } from "@/lib/wishlist";
 
 export const metadata: Metadata = {
   title: "Каталог — Dream Gold",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
     "Каталог авторських ювелірних виробів Dream Gold: каблучки, сережки, браслети, кольє та обручки. Без цін — залиште заявку, втілимо вашу ідею.",
 };
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const { authed, slugs } = await getWishlist();
+
   return (
     <section className="bg-ivory text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-6 pb-[var(--s-section)] pt-[clamp(7rem,14vh,11rem)] lg:px-10">
@@ -27,6 +30,8 @@ export default function CatalogPage() {
           <CatalogGrid
             products={PRODUCTS}
             categories={getCategoriesWithProducts()}
+            authed={authed}
+            savedSlugs={slugs}
           />
         </div>
       </div>
