@@ -12,6 +12,15 @@ const NAV = [
   { label: "Каталог", href: "/catalog" },
   { label: "Індивідуальне", href: "/individual" },
   { label: "Про нас", href: "/about" },
+  { label: "Шоурум", href: "/showroom" },
+  { label: "Контакти", href: "/contacts" },
+];
+
+// Кабінет/Збережене — у десктопі це іконки в шапці (sm:inline-flex), тож на
+// мобільному вони доступні лише звідси, у нижній групі бургер-меню.
+const ACCOUNT_NAV = [
+  { label: "Кабінет", href: "/account", icon: User },
+  { label: "Збережене", href: "/wishlist", icon: Heart },
 ];
 
 export function SiteHeader() {
@@ -122,6 +131,22 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
+          <div className="mt-10 flex flex-col gap-5 border-t border-line pt-8">
+            {ACCOUNT_NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                className={`inline-flex items-center gap-3 text-[15px] tracking-wide transition-colors ${
+                  isActive(item.href) ? "text-ink" : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                <item.icon className="size-5" strokeWidth={1.5} />
+                {item.label}
+              </Link>
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => {

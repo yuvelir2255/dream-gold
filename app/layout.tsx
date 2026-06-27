@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Manrope } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { Cursor } from "@/components/layout/cursor";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { RouteTransition } from "@/components/layout/route-transition";
@@ -85,6 +86,7 @@ export default function RootLayout({
               "try{if(sessionStorage.getItem('dg-preloaded')){document.documentElement.classList.add('dg-preloaded')}else{document.documentElement.classList.add('dg-preloading')}}catch(e){}",
           }}
         />
+        <Cursor />
         <SmoothScroll>
           <InquiryProvider>
             <Preloader />

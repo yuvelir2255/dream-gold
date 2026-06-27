@@ -61,6 +61,7 @@ export function CatalogGrid({
               product={p}
               authed={authed}
               saved={savedSlugs.includes(p.slug)}
+              priority={i < 3}
             />
           </li>
         ))}
