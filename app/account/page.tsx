@@ -57,10 +57,11 @@ export default async function AccountPage() {
   return (
     <section className="bg-ivory text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-6 pb-[var(--s-section)] pt-[clamp(7rem,14vh,11rem)] lg:px-10">
-        <p className="font-display text-base italic text-ink-muted">Кабінет</p>
-
         {user ? (
           <>
+            <p className="font-display text-base italic text-ink-muted">
+              Кабінет
+            </p>
             <h1 className="mt-4 max-w-3xl text-balance font-display text-h1 leading-[1.05] text-ink">
               Вітаємо{user.name ? `, ${user.name}` : ""}
             </h1>
@@ -141,18 +142,21 @@ export default async function AccountPage() {
             </form>
           </>
         ) : (
-          <>
-            <h1 className="mt-4 max-w-3xl text-balance font-display text-h1 leading-[1.05] text-ink">
+          <div className="mx-auto flex max-w-md flex-col items-center">
+            <p className="font-display text-base italic text-ink-muted">
+              Кабінет
+            </p>
+            <h1 className="mt-4 text-balance text-center font-display text-h1 leading-[1.05] text-ink">
               Вхід до кабінету
             </h1>
-            <p className="mt-6 max-w-xl text-pretty text-lg font-light leading-relaxed text-ink-muted">
+            <p className="mt-6 text-pretty text-center text-lg font-light leading-relaxed text-ink-muted">
               Увійдіть, щоб бачити свої заявки та збережені прикраси.
             </p>
 
-            <div className="mt-[clamp(2.5rem,6vw,4rem)]">
+            <div className="mt-[clamp(2.5rem,6vw,4rem)] w-full">
               <SignIn />
             </div>
-          </>
+          </div>
         )}
       </div>
     </section>

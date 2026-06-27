@@ -17,44 +17,42 @@ export default async function WishlistPage() {
   return (
     <section className="bg-ivory text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-6 pb-[var(--s-section)] pt-[clamp(7rem,14vh,11rem)] lg:px-10">
-        <p className="font-display text-base italic text-ink-muted">Збережене</p>
-        <h1 className="mt-4 max-w-3xl text-balance font-display text-h1 leading-[1.05] text-ink">
-          Список бажаного
-        </h1>
-
-        {!authed ? (
+        {authed && saved.length > 0 ? (
           <>
-            <p className="mt-6 max-w-xl text-pretty text-lg font-light leading-relaxed text-ink-muted">
-              Увійдіть, щоб зберігати прикраси та повертатися до них пізніше.
+            <p className="font-display text-base italic text-ink-muted">
+              Збережене
             </p>
-            <Link
-              href="/account"
-              className="mt-9 inline-flex bg-gold px-7 py-3.5 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream"
-            >
-              Увійти
-            </Link>
-          </>
-        ) : saved.length === 0 ? (
-          <>
-            <p className="mt-6 max-w-xl text-pretty text-lg font-light leading-relaxed text-ink-muted">
-              Поки що порожньо. Натискайте ♥ на прикрасах у каталозі — вони
-              зʼявляться тут.
-            </p>
-            <Link
-              href="/catalog"
-              className="mt-9 inline-flex bg-gold px-7 py-3.5 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream"
-            >
-              До каталогу
-            </Link>
+            <h1 className="mt-4 max-w-3xl text-balance font-display text-h1 leading-[1.05] text-ink">
+              Список бажаного
+            </h1>
+            <ul className="mt-[clamp(2.5rem,6vw,4rem)] grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
+              {saved.map((p) => (
+                <li key={p.slug}>
+                  <ProductCard product={p} authed saved />
+                </li>
+              ))}
+            </ul>
           </>
         ) : (
-          <ul className="mt-[clamp(2.5rem,6vw,4rem)] grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
-            {saved.map((p) => (
-              <li key={p.slug}>
-                <ProductCard product={p} authed saved />
-              </li>
-            ))}
-          </ul>
+          <div className="mx-auto flex max-w-lg flex-col items-center text-center">
+            <p className="font-display text-base italic text-ink-muted">
+              Збережене
+            </p>
+            <h1 className="mt-4 text-balance text-center font-display text-h1 leading-[1.05] text-ink">
+              Список бажаного
+            </h1>
+            <p className="mt-6 text-pretty text-lg font-light leading-relaxed text-ink-muted">
+              {!authed
+                ? "Увійдіть, щоб зберігати прикраси та повертатися до них пізніше."
+                : "Поки що порожньо. Натискайте ♥ на прикрасах у каталозі — вони зʼявляться тут."}
+            </p>
+            <Link
+              href={!authed ? "/account" : "/catalog"}
+              className="mt-9 inline-flex bg-gold px-7 py-3.5 text-eyebrow font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:bg-gold-deep hover:text-cream"
+            >
+              {!authed ? "Увійти" : "До каталогу"}
+            </Link>
+          </div>
         )}
       </div>
     </section>

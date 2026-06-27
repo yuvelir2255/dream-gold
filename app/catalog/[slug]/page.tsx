@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Gem, Truck } from "lucide-react";
 import {
   PRODUCTS,
   getProduct,
@@ -47,15 +47,19 @@ export default async function ProductPage({ params }: Params) {
         </Link>
 
         <div className="mt-8 grid gap-x-16 gap-y-10 lg:grid-cols-2">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-sand lg:sticky lg:top-28 lg:self-start">
-            <Image
-              src={product.image}
-              alt={product.alt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
+          {/* sticky на зовнішній обгортці; relative-контейнер усередині —
+              інакше Next/Image fill свариться на position:sticky */}
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-sand">
+              <Image
+                src={product.image}
+                alt={product.alt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
           </div>
 
           <div className="lg:py-2">
@@ -94,6 +98,32 @@ export default async function ProductPage({ params }: Params) {
               Кожен виріб — індивідуальне замовлення. Втілимо цю модель або вашу
               ідею на її основі — із вашими каменем, металом і розміром.
             </p>
+
+            <ul className="mt-10 grid grid-cols-3 gap-5 border-t border-line pt-8">
+              {[
+                {
+                  icon: BadgeCheck,
+                  label: "Проба та клеймо",
+                  note: "Державна гарантія",
+                },
+                {
+                  icon: Gem,
+                  label: "Сертифікат на камінь",
+                  note: "GIA · IGI",
+                },
+                { icon: Truck, label: "Доставка", note: "Україна та світ" },
+              ].map(({ icon: Icon, label, note }) => (
+                <li key={label} className="flex flex-col gap-2.5">
+                  <Icon className="size-5 text-gold-deep" strokeWidth={1.5} />
+                  <span className="text-[13px] leading-snug text-ink">
+                    {label}
+                  </span>
+                  <span className="text-xs leading-snug text-ink-faint">
+                    {note}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
