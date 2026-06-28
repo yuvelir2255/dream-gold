@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useReveal } from "@/lib/use-reveal";
 
 const PILLARS = [
@@ -85,6 +86,19 @@ export function Craft() {
               Від ескізу до клейма проби — кожен етап проходить у власній
               майстерні, під контролем майстрів із багаторічним досвідом.
             </p>
+
+            <div
+              data-intro
+              className="relative mt-9 aspect-[4/5] w-full max-w-sm overflow-hidden rounded-sm bg-sand"
+            >
+              <Image
+                src="/images/about/quality.jpg"
+                alt="Сертифікований діамант у пінцеті під ювелірною лупою — контроль якості каміння Dream Gold"
+                fill
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                className="object-cover"
+              />
+            </div>
           </div>
 
           <ul className="lg:pt-1">

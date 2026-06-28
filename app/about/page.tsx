@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Craft } from "@/components/sections/craft";
 import { Inquiry } from "@/components/sections/inquiry";
 
@@ -25,6 +26,17 @@ export default function AboutPage() {
             увага до деталі: від першого ескізу до клейма проби. Створюємо
             прикраси, які стають частиною особистих історій.
           </p>
+
+          <div className="relative mt-[clamp(2.5rem,6vw,4.5rem)] aspect-[3/2] w-full overflow-hidden rounded-sm bg-sand">
+            <Image
+              src="/images/about/workbench.jpg"
+              alt="Руки майстра Dream Gold обробляють золоту каблучку за верстаком із ювелірним інструментом"
+              fill
+              priority
+              sizes="(max-width: 1400px) 100vw, 1400px"
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 
